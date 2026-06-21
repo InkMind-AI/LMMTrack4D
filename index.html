@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="title" content="LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue">
+  <meta name="description" content="LMM-Track4D elicits 4D dynamic reasoning in large multimodal models via trajectory-grounded multi-turn spatiotemporal dialogue, with Track4D-Bench and RTGE, TRK, and OSK-RA modules.">
+  <meta name="keywords" content="LMM-Track4D, 4D dynamic reasoning, large multimodal models, trajectory grounding, Track4D-Bench, spatiotemporal dialogue, 3D tracking">
+  <meta name="author" content="Chaoyue Li, Yongxue Xu, Jie Feng, Jiayu Ding">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="LMM-Track4D">
+  <meta property="og:title" content="LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue">
+  <meta property="og:description" content="Trajectory-grounded multi-turn spatiotemporal dialogue with Track4D-Bench and explicit dynamic state modeling for 4D reasoning in LMMs.">
+  <meta property="og:url" content="https://inkmind-ai.github.io/LMMTrack4D/">
+  <meta property="og:image" content="https://inkmind-ai.github.io/LMMTrack4D/static/images/task_overview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LMM-Track4D task and model overview">
+  <meta property="article:published_time" content="2026-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Jiayu Ding">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="4D Dynamic Reasoning">
+  <meta property="article:tag" content="Large Multimodal Models">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue">
+  <meta name="twitter:description" content="Track4D-Bench and LMM-Track4D with RTGE, TRK, and OSK-RA for dialogue-grounded 4D dynamic reasoning.">
+  <meta name="twitter:image" content="https://inkmind-ai.github.io/LMMTrack4D/static/images/task_overview.png">
+
+  <meta name="citation_title" content="LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue">
+  <meta name="citation_author" content="Li, Chaoyue">
+  <meta name="citation_author" content="Xu, Yongxue">
+  <meta name="citation_author" content="Feng, Jie">
+  <meta name="citation_author" content="Ding, Jiayu">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_journal_title" content="arXiv">
+  <meta name="citation_arxiv_id" content="2605.19390">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2605.19390">
+
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="msapplication-TileColor" content="#0ea5e9">
+  <link rel="canonical" href="https://inkmind-ai.github.io/LMMTrack4D/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>LMM-Track4D</title>
+
+  <link rel="icon" type="image/png" href="static/images/icon.png">
+  <link rel="apple-touch-icon" href="static/images/icon.png">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue",
+    "description": "LMM-Track4D combines RTGE, TRK state propagation, and OSK-RA decoding for trajectory-grounded multi-turn spatiotemporal dialogue on Track4D-Bench.",
+    "author": [
+      {"@type": "Person", "name": "Chaoyue Li", "affiliation": {"@type": "Organization", "name": "Huazhong University of Science and Technology"}},
+      {"@type": "Person", "name": "Yongxue Xu", "affiliation": {"@type": "Organization", "name": "Sun Yat-sen University"}},
+      {"@type": "Person", "name": "Jie Feng", "affiliation": {"@type": "Organization", "name": "Beihang University"}},
+      {"@type": "Person", "name": "Jiayu Ding", "affiliation": {"@type": "Organization", "name": "Peking University"}}
+    ],
+    "datePublished": "2026-01-01",
+    "publisher": {"@type": "Organization", "name": "arXiv"},
+    "url": "https://inkmind-ai.github.io/LMMTrack4D/",
+    "image": "https://inkmind-ai.github.io/LMMTrack4D/static/images/task_overview.png",
+    "keywords": ["4D Dynamic Reasoning", "Large Multimodal Models", "Track4D-Bench", "Trajectory Grounding", "Spatiotemporal Dialogue"],
+    "sameAs": [
+      "https://arxiv.org/abs/2605.19390",
+      "https://github.com/mikubaka88/LMM-Track4D"
+    ],
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+
+  <!-- Hero -->
+  <section class="hero publication-header">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title vj-hero-title-cyber">LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Chaoyue Li<sup>1,5</sup></span>
+              <span class="author-block">Yongxue Xu<sup>2,5*</sup></span>
+              <span class="author-block">Jie Feng<sup>3,5*</sup></span>
+              <span class="author-block">Jiayu Ding<sup>4,5&dagger;</sup></span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>1</sup>Huazhong University of Science and Technology</span>
+              <span class="author-block"><sup>2</sup>Sun Yat-sen University</span>
+              <span class="author-block"><sup>3</sup>Beihang University</span>
+              <span class="author-block"><sup>4</sup>Peking University</span>
+              <span class="author-block"><sup>5</sup>InkMind.AI</span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="eql-cntrb"><small><sup>*</sup>Equal contribution. <sup>&dagger;</sup>Corresponding author.</small></span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block">
+                <a href="mailto:hustlichaoyue@hust.edu.cn">hustlichaoyue@hust.edu.cn</a>
+                &nbsp;&middot;&nbsp;
+                <a href="mailto:jyding25@stu.pku.edu.cn">jyding25@stu.pku.edu.cn</a>
+              </span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="publication-venue">arXiv 2026</span>
+            </div>
+
+            <div class="publication-links mt-4">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2605.19390" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2605.19390" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/mikubaka88/LMM-Track4D" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Task teaser -->
+  <section class="hero is-small teaser-figure">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-11">
+            <d-figure id="fig-task-overview">
+              <figure>
+                <img data-zoomable draggable="false" src="static/images/task_overview.png" alt="Task and model overview for trajectory-grounded multi-turn spatiotemporal dialogue" loading="eager">
+                <figcaption>
+                  Task and model overview for <strong>trajectory-grounded multi-turn spatiotemporal dialogue</strong>. A generic 4D LMM lacks explicit geometry-grounded state maintenance, whereas <strong>LMM-Track4D</strong> adds RTGE, persistent TRK propagation, and structured trajectory decoding. Representative cases and the performance radar highlight the gap on dialogue-grounded 4D dynamic reasoning.
+                </figcaption>
+              </figure>
+            </d-figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent large multimodal models (LMMs) have become increasingly capable on image and video understanding, yet still struggle to sustain <strong>4D continuous spatiotemporal dynamic reasoning</strong>. To study this capability gap, we formulate <strong>trajectory-grounded multi-turn spatiotemporal dialogue</strong>, a new task in which a model must answer spatiotemporal queries while returning structured 3D target trajectories over an entire short clip or a specified segment of a longer clip, and introduce <strong>Track4D-Bench</strong>, a benchmark with 526 clip-level dialogue samples spanning 23.5k frames and 7.5k object annotations, for training and evaluation.
+            </p>
+            <p>
+              Building on this task, we propose <strong>LMM-Track4D</strong>, which combines RTGE (Ray&ndash;Time Geometry Encoding), a dedicated streaming state token TRK for long-horizon dynamic propagation, and an Object-Slot Kinematic, Residual-Anchor (OSK-RA) decoder for stable 4-step 3D state estimation under occlusion and viewpoint variation. Experiments on Track4D-Bench show consistent improvements over strong baselines, suggesting that explicit dynamic state modeling is a useful design principle for eliciting 4D dynamic reasoning in LMMs. Our code and dataset will be publicly available at <a href="https://github.com/mikubaka88/LMM-Track4D" target="_blank" rel="noopener noreferrer">https://github.com/mikubaka88/LMM-Track4D</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key highlights -->
+  <section class="section" id="highlights">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Key Highlights</h2>
+      <div class="columns is-multiline is-centered highlight-cards">
+        <div class="column is-6-tablet is-3-desktop">
+          <div class="highlight-card">
+            <div class="highlight-icon"><i class="fas fa-comments"></i></div>
+            <h3 class="title is-5">New Task</h3>
+            <p>Trajectory-grounded multi-turn spatiotemporal dialogue couples language reasoning with explicit 3D state prediction across views and dialogue turns.</p>
+          </div>
+        </div>
+        <div class="column is-6-tablet is-3-desktop">
+          <div class="highlight-card">
+            <div class="highlight-icon"><i class="fas fa-database"></i></div>
+            <h3 class="title is-5">Track4D-Bench</h3>
+            <p>526 auditable clip-level dialogue samples from APIDIS, KITTI, and WildTrack, with verified 3D trajectories and multi-turn supervision.</p>
+          </div>
+        </div>
+        <div class="column is-6-tablet is-3-desktop">
+          <div class="highlight-card">
+            <div class="highlight-icon"><i class="fas fa-project-diagram"></i></div>
+            <h3 class="title is-5">LMM-Track4D</h3>
+            <p>RTGE geometry encoding, persistent TRK state propagation, and OSK-RA decoding for stable 4D dynamic state maintenance.</p>
+          </div>
+        </div>
+        <div class="column is-6-tablet is-3-desktop">
+          <div class="highlight-card">
+            <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
+            <h3 class="title is-5">Strong Gains</h3>
+            <p>Large improvements in dense non-keyframe inference, severe occlusion, and long-range identity preservation over proprietary and open-source LMMs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track4D-Bench -->
+  <section class="section hero is-light" id="benchmark">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Track4D-Bench</h2>
+      <p class="subtitle has-text-centered is-5 method-subtitle">
+        A query-driven benchmark for continuous 4D dynamic reasoning with auditable 3D supervision
+      </p>
+      <div class="content has-text-justified benchmark-text">
+        <p>
+          Track4D-Bench is built through a structured pipeline&mdash;state preparation, clip formation, dialogue construction, and quality control&mdash;rather than direct raw-video prompting. It assembles <strong>526 clip-level dialogue samples</strong> covering <strong>23.5k frames</strong> and <strong>7.5k object annotations</strong>, alongside verified 3D trajectories, object-centric visual evidence, synchronized keyframes, textual descriptions, and multi-turn supervision. The short-clip regime combines full-clip trajectory outputs with qualitative spatiotemporal questions, whereas the long-clip regime pairs local-segment tracking with single-moment queries.
+        </p>
+      </div>
+
+      <d-figure id="fig-benchmark" class="mt-4">
+        <figure>
+          <img data-zoomable draggable="false" src="static/images/benchmark.png" alt="Track4D-Bench overview" loading="lazy">
+          <figcaption>
+            <strong>Track4D-Bench overview.</strong> Benchmark scale, question taxonomy, the 3D trajectory&ndash;visual evidence&ndash;dialogue construction pipeline, and the main diagnostic axes used to probe 4D dynamic reasoning.
+          </figcaption>
+        </figure>
+      </d-figure>
+
+      <div class="results-table-block mt-5">
+        <p class="results-table-caption">
+          <strong>Table 1:</strong> Statistics of Track4D-Bench. Frame and object counts are accumulated at the clip level.
+        </p>
+        <div class="results-table-scroll">
+          <table class="results-table results-table-compact">
+            <thead>
+              <tr>
+                <th>Source dataset</th>
+                <th>Clips</th>
+                <th>QA turns</th>
+                <th>Frames</th>
+                <th>Objects</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>APIDIS</td>
+                <td>77</td>
+                <td>336</td>
+                <td>3,904</td>
+                <td>1,154</td>
+              </tr>
+              <tr>
+                <td>KITTI</td>
+                <td>383</td>
+                <td>1,585</td>
+                <td>18,688</td>
+                <td>4,205</td>
+              </tr>
+              <tr>
+                <td>WildTrack</td>
+                <td>66</td>
+                <td>274</td>
+                <td>912</td>
+                <td>2,165</td>
+              </tr>
+              <tr class="ours-row">
+                <td><strong>Total</strong></td>
+                <td><strong>526</strong></td>
+                <td><strong>2,195</strong></td>
+                <td><strong>23,504</strong></td>
+                <td><strong>7,524</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method Overview</h2>
+      <p class="subtitle has-text-centered is-5 method-subtitle">
+        Explicit dynamic state modeling across geometry, dialogue history, and 3D decoding
+      </p>
+      <d-figure id="fig-method">
+        <figure>
+          <img data-zoomable draggable="false" src="static/images/method.png" alt="LMM-Track4D method overview" loading="lazy">
+          <figcaption>
+            <strong>LMM-Track4D pipeline.</strong> RTGE injects ray-time geometry into visual tokens, TRK propagates target identity and motion evidence across dialogue turns, and OSK-RA decodes query-conditioned 3D trajectories from multiview observations within a unified 4D dynamic reasoning framework.
+          </figcaption>
+        </figure>
+      </d-figure>
+
+      <div class="columns is-multiline mt-5 method-stages">
+        <div class="column is-4">
+          <div class="stage-card">
+            <span class="stage-num">01</span>
+            <h3 class="title is-5">RTGE</h3>
+            <p>Ray&ndash;Time Geometry Encoding injects Pl&uuml;cker ray descriptors and Fourier time embeddings into ViT patch tokens, grounding visual features in multiview geometry and physical timestamps.</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="stage-card">
+            <span class="stage-num">02</span>
+            <h3 class="title is-5">TRK State Token</h3>
+            <p>A persistent streaming state token accumulates target identity and motion evidence across dialogue turns, enabling long-horizon continuity without re-inferring from raw history each time.</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="stage-card">
+            <span class="stage-num">03</span>
+            <h3 class="title is-5">OSK-RA Decoder</h3>
+            <p>Object-Slot Kinematic, Residual-Anchor decoding separates semantic target selection from kinematic refinement, producing stable 4-step world-coordinate trajectories under occlusion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section hero is-light" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Experimental Results</h2>
+      <div class="content has-text-justified benchmark-text">
+        <p>
+          On Track4D-Bench, LMM-Track4D substantially outperforms proprietary LMMs, open-source video LMMs, and same-dataset SFT controls. Strong baselines achieve non-trivial language scores but do not provide comparable structured 3D outputs under a unified protocol. LMM-Track4D is the only model to combine strong language quality with robust geometry, reaching <strong>0.758 SAcc@0.5</strong>, <strong>0.626 Traj-Acc@1.0</strong>, and <strong>0.619 TAcc@0.5</strong>.
+        </p>
+      </div>
+
+      <div class="results-table-block mt-5">
+        <p class="results-table-caption">
+          <strong>Table 2:</strong> Complete baseline comparison on Track4D-Bench. Bold and underline denote the best and second best values; &mdash; indicates unavailable entries under the current protocol.
+        </p>
+        <div class="results-table-scroll">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>C &uarr;</th>
+                <th>B-4 &uarr;</th>
+                <th>M &uarr;</th>
+                <th>SAcc@0.5 &uarr;</th>
+                <th>Traj-Acc@1.0 &uarr;</th>
+                <th>TAcc@0.5 &uarr;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-row">
+                <td colspan="7"><strong>Proprietary LMMs</strong></td>
+              </tr>
+              <tr>
+                <td>GPT-4o</td>
+                <td>0.246</td>
+                <td>0.132</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>Gemini 2.5 Pro</td>
+                <td>0.155</td>
+                <td>0.062</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr class="group-row">
+                <td colspan="7"><strong>Open-source LMMs</strong></td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-9B-Instruct</td>
+                <td>0.314</td>
+                <td>0.169</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>LLaVA-Video</td>
+                <td>0.059</td>
+                <td>0.057</td>
+                <td>0.131</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>Video-3D LLM</td>
+                <td>0.000</td>
+                <td>0.000</td>
+                <td>0.030</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>LLaVA-3D</td>
+                <td>0.000</td>
+                <td>0.003</td>
+                <td>0.015</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>MLLM-4D</td>
+                <td>0.133</td>
+                <td>0.094</td>
+                <td>0.164</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr class="group-row">
+                <td colspan="7"><strong>Same-dataset SFT controls</strong></td>
+              </tr>
+              <tr>
+                <td>Video-3D LLM + SFT</td>
+                <td>0.000</td>
+                <td>0.005</td>
+                <td>0.041</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>LLaVA-Video + SFT</td>
+                <td>0.115</td>
+                <td>0.084</td>
+                <td>0.226</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>Qwen2.5-VL-7B + SFT</td>
+                <td>0.035</td>
+                <td>0.000</td>
+                <td>0.108</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td>Qwen3.5-9B + SFT</td>
+                <td><span class="val-second">0.451</span></td>
+                <td><span class="val-second">0.220</span></td>
+                <td><span class="val-second">0.348</span></td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr class="ours-row">
+                <td><strong>LMM-Track4D (Ours)</strong></td>
+                <td><strong>0.698</strong></td>
+                <td><strong>0.322</strong></td>
+                <td><strong>0.453</strong></td>
+                <td><strong>0.758</strong></td>
+                <td><strong>0.626</strong></td>
+                <td><strong>0.619</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="results-tables-split mt-5">
+        <div class="columns is-desktop">
+          <div class="column is-6-desktop">
+            <div class="results-table-block results-table-block-compact">
+              <p class="results-table-caption">
+                <strong>Table 3:</strong> Question-type breakdown of LMM-Track4D on Track4D-Bench.
+              </p>
+              <div class="results-table-scroll">
+                <table class="results-table results-table-compact">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>C &uarr;</th>
+                      <th>SAcc@0.5 &uarr;</th>
+                      <th>Traj-Acc@1.0 &uarr;</th>
+                      <th>TAcc@0.5 &uarr;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Identity</td>
+                      <td><strong>1.274</strong></td>
+                      <td>70.0</td>
+                      <td>70.0</td>
+                      <td>63.6</td>
+                    </tr>
+                    <tr>
+                      <td>Trajectory</td>
+                      <td>0.678</td>
+                      <td><span class="val-second">87.9</span></td>
+                      <td><span class="val-second">78.8</span></td>
+                      <td><span class="val-second">77.8</span></td>
+                    </tr>
+                    <tr>
+                      <td>Relation</td>
+                      <td>0.539</td>
+                      <td><strong>100.0</strong></td>
+                      <td><strong>81.1</strong></td>
+                      <td><strong>89.9</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Motion trend</td>
+                      <td>0.420</td>
+                      <td>78.8</td>
+                      <td>51.5</td>
+                      <td>44.4</td>
+                    </tr>
+                    <tr>
+                      <td>Scene-level</td>
+                      <td>0.369</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-6-desktop">
+            <div class="results-table-block results-table-block-compact">
+              <p class="results-table-caption">
+                <strong>Table 4:</strong> Component ablation of LMM-Track4D on Track4D-Bench.
+              </p>
+              <div class="results-table-scroll">
+                <table class="results-table results-table-compact">
+                  <thead>
+                    <tr>
+                      <th>Variant</th>
+                      <th>C &uarr;</th>
+                      <th>SAcc@0.5 &uarr;</th>
+                      <th>Traj-Acc@1.0 &uarr;</th>
+                      <th>TAcc@0.5 &uarr;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="ours-row">
+                      <td><strong>Full model</strong></td>
+                      <td><strong>0.698</strong></td>
+                      <td><strong>0.758</strong></td>
+                      <td><strong>0.626</strong></td>
+                      <td><strong>0.619</strong></td>
+                    </tr>
+                    <tr>
+                      <td>w/o OSK-RA</td>
+                      <td><span class="val-second">0.631</span></td>
+                      <td>0.588</td>
+                      <td>0.500</td>
+                      <td>0.425</td>
+                    </tr>
+                    <tr>
+                      <td>w/o RTGE</td>
+                      <td>0.579</td>
+                      <td><span class="val-second">0.714</span></td>
+                      <td><span class="val-second">0.571</span></td>
+                      <td><span class="val-second">0.482</span></td>
+                    </tr>
+                    <tr>
+                      <td>w/o TRK</td>
+                      <td>0.509</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                    </tr>
+                    <tr>
+                      <td>Backbone only</td>
+                      <td>0.451</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                      <td>&mdash;</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qualitative -->
+  <section class="section" id="qualitative">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+      <p class="subtitle has-text-centered is-5 method-subtitle">
+        Dialogue-grounded 4D dynamic reasoning across sports, driving, and crowded pedestrian scenes
+      </p>
+
+      <d-figure id="fig-qualitative">
+        <figure>
+          <img data-zoomable draggable="false" src="static/images/demo.png" alt="Qualitative dialogue-grounded comparison on Track4D-Bench" loading="lazy">
+          <figcaption>
+            <strong>Qualitative dialogue-grounded comparison.</strong> LMM-Track4D correctly identifies the shooter, localizes the release moment, and recovers the 3D trajectories of the player and ball. Compared baselines are shown with dialogue responses only because they do not produce comparable structured trajectory outputs under the current protocol.
+          </figcaption>
+        </figure>
+      </d-figure>
+
+      <div class="columns is-centered mt-5">
+        <div class="column is-12">
+          <d-figure id="fig-qual-apidis">
+            <figure>
+              <img data-zoomable draggable="false" src="static/images/qual_apidis.png" alt="Qualitative example from APIDIS" loading="lazy">
+              <figcaption>Qualitative example from <strong>APIDIS</strong> in a crowded multi-player sports scene, requiring player-identity tracking and interaction reasoning under occlusion.</figcaption>
+            </figure>
+          </d-figure>
+        </div>
+      </div>
+
+      <div class="columns is-centered mt-4">
+        <div class="column is-12">
+          <d-figure id="fig-qual-kitti">
+            <figure>
+              <img data-zoomable draggable="false" src="static/images/qual_kitti.png" alt="Qualitative example from KITTI" loading="lazy">
+              <figcaption>Qualitative example from <strong>KITTI</strong> in a street-driving scene, requiring object-identity tracking and evolving spatial-state reasoning under ego motion.</figcaption>
+            </figure>
+          </d-figure>
+        </div>
+      </div>
+
+      <div class="columns is-centered mt-4">
+        <div class="column is-12">
+          <d-figure id="fig-qual-wildtrack">
+            <figure>
+              <img data-zoomable draggable="false" src="static/images/qual_wildtrack.png" alt="Qualitative example from WildTrack" loading="lazy">
+              <figcaption>Qualitative example from <strong>WildTrack</strong> in a crowded multi-view pedestrian scene, requiring target-identity tracking and spatial continuity under overlap and viewpoint variation.</figcaption>
+            </figure>
+          </d-figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section hero is-light" id="bibtex">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title is-3">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{li2026lmmtrack4d,
+  title={LMM-Track4D: Eliciting 4D Dynamic Reasoning in LMMs via Trajectory-Grounded Dialogue},
+  author={Chaoyue Li and Yongxue Xu and Jie Feng and Jiayu Ding},
+  journal={arXiv preprint arXiv:2605.19390},
+  year={2026}
+}</code></pre>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8 has-text-centered">
+          <div class="content">
+            <p>
+              This page was built using the
+              <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
